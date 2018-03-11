@@ -1,0 +1,39 @@
+<script>
+
+    /* If we are using a Chrome Extension like Metamask or Ethereum Browser like MIST
+    The provider is automatically injected into the JavaScript context.
+    If Web3 is not undefined => use it as a provider */
+    if (typeof web3 != 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        // If it is undefined => simply manually provide it
+        // Basically, we need to get it either way
+         web3 = new Web3(new Web3.provider.HttpProvider("http://localhost:8545"));
+    }
+
+    // Give the default account we will be using
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+
+    //Initialize the contract: ABI => Application Binary Interface
+    /* This allows us to interact with our smart contract
+    using the variable defined below */
+    var smartContract = web3.eth.contract({'the-contract-ABI-goes-here'});
+a
+    //Give the actual contract address
+    var smartContractAddress = smartContract.at('address-of-the-contract-goes-here');
+    console.log(smartContractAddress);
+
+    smartContractAddress.getInstructor((err, result) => {
+        if(!err) {
+            $("#instructor").html(result[0]+ '  '+ result[1] + ' years old.');
+        } else {
+            console.log(err);
+        }
+    });
+
+    $("#button").click(()=> {
+        smartContractAddress.setInstructor($("#name").val(), $("#age").val());
+    });
+
+
+</script>
